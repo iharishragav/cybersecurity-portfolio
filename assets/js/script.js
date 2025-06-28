@@ -98,3 +98,35 @@ for (let i = 0; i < navigationLinks.length; i++) {
     }
   });
 }
+
+// Formspree Integration
+const formspreeForm = document.querySelector(".form");
+const formStatus = document.querySelector(".form-status");
+
+async function handleSubmit(event) {
+  event.preventDefault();
+  const data = new FormData(event.target);
+  fetch(event.target.action, {
+    method: formspreeForm.method,
+    body: data,
+    headers: {
+        'Accept': 'application/json'
+    }
+  }).then(response => {
+    if (response.ok) {
+      formStatus.innerHTML = "Thanks for your submission!";
+      formspreeForm.reset()
+    } else {
+      response.json().then(data => {
+        if (Object.hasOwn(data, 'errors')) {
+          formStatus.innerHTML = data["errors"].map(error => error["message"]).join(", ")
+        } else {
+          formStatus.innerHTML = "Oops! There was a problem submitting your form"
+        }
+      })
+    }
+  }).catch(error => {
+    formStatus.innerHTML = "Oops! There was a problem submitting your form"
+  });
+}
+formspreeForm.addEventListener("submit", handleSubmit)
