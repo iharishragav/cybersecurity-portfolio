@@ -36,10 +36,14 @@ for (let i = 0; i < selectItems.length; i++) {
 const filterItems = document.querySelectorAll("[data-filter-item]");
 
 const filterFunc = function (selectedValue) {
+  const trimmedSelectedValue = selectedValue.trim();
+
   for (let i = 0; i < filterItems.length; i++) {
-    if (selectedValue === "all") {
+    const itemCategory = filterItems[i].dataset.category.trim();
+
+    if (trimmedSelectedValue === "all") {
       filterItems[i].classList.add("active");
-    } else if (filterItems[i].dataset.category.split(' ').includes(selectedValue)) {
+    } else if (itemCategory.includes(trimmedSelectedValue)) {
       filterItems[i].classList.add("active");
     } else {
       filterItems[i].classList.remove("active");
